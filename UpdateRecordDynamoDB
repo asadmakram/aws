@@ -1,0 +1,55 @@
+const aws = require("aws-sdk");
+
+
+// DB instance should be initialized in the starting or in the global scope.
+// re-initialization every time takes time because this library function is quiet heavy.
+// to keep the lambda memory efficient do initilize this object in the global scope.
+const docClient = new aws.DynamoDB.DocumentClient();
+
+exports.updateRecordDynamoDB = function (event, context, callback) {
+
+    // Expression which shows how many fields should be updated in the database.
+    // expression must not include Primary Hash Key. 
+    // Otherwise database service would throw an exception.
+    var UpdateExpression = "set UserName=:UserName, DisplayName = :DisplayName";
+
+    // Expression attributes defined in the UpdateExpression must be initialized here otherwise an exception would be thrown.
+    var ExpressionAttributeValues = {
+      ":UserName": "user1",
+      ":DisplayName" : "Test User 1"
+    };
+    
+    // Params object to be passed to the dynamodb api
+    var params = {
+    
+        // 1. Table Name which need to update a record.
+        TableName: tableName,
+        // 2. Two types of keys a table can have.
+        // 2.1 : Table with hash key only
+          // Key: { Email: "abcd@gmail.com",  },
+        //2.2 : Table with Hash and Range key
+          //Key: { Email: "abcd@gmail.com", "UserID": "user1" },
+
+        UpdateExpression,
+        ExpressionAttributeValues,
+    };
+    
+    try {
+        docClient.update(params)
+            .promise()
+            .then(function (result) {
+            
+              // successfully updated the record in the database.
+              callback(null, "successfully inserted record");            
+            }, function(err) {
+            
+              // error occured while creating record.
+              callback(null, err);          
+            });
+    } catch (ex) {
+    
+        // error occured while creating record.
+        callback(null, ex);
+    }
+
+}
