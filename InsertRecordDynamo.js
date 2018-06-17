@@ -4,7 +4,7 @@ const aws = require("aws-sdk");
 // re-initialization every time takes time because this library function is quiet heavy.
 // to keep the lambda memory efficient do initilize this object in the global scope.
 
-const docClient = new aws.DynamoDB.DocumentClient(config)
+const docClient = new aws.DynamoDB.DocumentClient()
 
 exports.InsertRecordDynamo = function(event, context, callback){
 
