@@ -1,0 +1,37 @@
+const aws = require("aws-sdk");
+
+// DB instance should be initialized in the starting or in the global scope.
+// re-initialization every time takes time because this library function is quiet heavy.
+// to keep the lambda memory efficient do initilize this object in the global scope.
+
+const docClient = new aws.DynamoDB.DocumentClient(config)
+
+exports.GetItem = function(event, context, callback){
+
+  var params = {
+    TableName: "TestTableName",
+    KeyConditionExpression: "Email = :Email",
+    ExpressionAttributeValues: {
+      ":Email": "asd@google.com"
+    }
+  };
+
+  try {
+  
+    documentclient.query(params).promise().then(function(data) {
+    
+        // successfully got data
+        callback(null, data);
+
+    }, function (err){
+    
+        // some error occured while retrieving record from db.
+        callback(null, err);
+    });
+  
+  } catch(ex) {
+
+        // exception occured while retrieving record.
+        callback(null, ex);
+  }
+}
