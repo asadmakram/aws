@@ -1,0 +1,45 @@
+const aws = require("aws-sdk");
+
+// DB instance should be initialized in the starting or in the global scope.
+// re-initialization every time takes time because this library function is quiet heavy.
+// to keep the lambda memory efficient do initilize this object in the global scope.
+
+const docClient = new aws.DynamoDB.DocumentClient(config)
+
+exports.BatchGetItems = function(event, context, callback){
+
+  var params = {
+    RequestItems: {
+    // replace here with your own database Name.
+      "UserDatabase": {
+      
+      // provide list of keys to be fetched from DB.
+        Keys: [
+                {UserName: "testUser1"}, 
+                {UserName: "testUser2"}
+             ]
+      }
+    }
+  };
+
+  try {
+  
+    documentclient.batchGet(params, function(err, data) {
+      if (err) {
+
+        // some error occured while retrieving records from db.
+        callback(null, err);
+      } else {
+
+        // successfully got data
+        callback(null, data);
+      }
+
+    });
+  
+  } catch(ex) {
+
+        // exception occured while retrieving record.
+        callback(null, ex);
+  }
+}
