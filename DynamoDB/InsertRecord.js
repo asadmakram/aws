@@ -6,7 +6,7 @@ const aws = require("aws-sdk");
 
 const docClient = new aws.DynamoDB.DocumentClient()
 
-exports.InsertRecordDynamo = function(event, context, callback){
+exports.InsertRecord = function(event, context, callback){
 
 // params structure which is required to create a record in DynamoDB Table.
 
