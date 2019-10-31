@@ -1,5 +1,3 @@
 # Amazon Web Services using Node.Js
-I want to develop a basic level understanding for amazon webservices using Node.Js.
-
-1. DynamoDB Service
+This project contains basic flow of amazon webservices using Node.Js. Currently It contains DynamoDB service, but very soon other services will be added.
 
